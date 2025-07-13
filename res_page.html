@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Responsive Landing Page</title>
+  <style>
+    :root {
+      --bg-color: #1e1e2f;
+      --text-color: #f0f0f0;
+      --accent-color: #ff4c60;
+      --scroll-bg: #2a2a3d;
+    }
+    body.light {
+      --bg-color: #ffffff;
+      --text-color: #1a1a1a;
+      --accent-color: #0055ff;
+      --scroll-bg: #e0e0e0;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.7;
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: transparent;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      z-index: 1000;
+    }
+    .navbar.scrolled {
+      background-color: var(--scroll-bg);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+    }
+    .nav-links li a {
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      color: var(--text-color);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .nav-links li a:hover {
+      color: var(--accent-color);
+    }
+    .nav-links li a::after {
+      content: '';
+      display: block;
+      width: 0%;
+      height: 2px;
+      background: var(--accent-color);
+      transition: width 0.3s;
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+    }
+    .nav-links li a:hover::after {
+      width: 100%;
+    }
+    .theme-toggle, .menu-toggle {
+      background: none;
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      font-size: 1.3rem;
+      margin-left: 1rem;
+    }
+    .section {
+      padding: 140px 20px 80px;
+      max-width: 900px;
+      margin: auto;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 1s forwards;
+    }
+    .section:nth-of-type(1) { animation-delay: 0.2s; }
+    .section:nth-of-type(2) { animation-delay: 0.4s; }
+    .section:nth-of-type(3) { animation-delay: 0.6s; }
+    .section:nth-of-type(4) { animation-delay: 0.8s; }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .section h1, .section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .section p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input, textarea {
+      padding: 0.7rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+    button.submit-btn {
+      padding: 0.7rem 1.2rem;
+      border: none;
+      background: var(--accent-color);
+      color: white;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button.submit-btn:hover {
+      background: #ff6f81;
+    }
+    .menu-toggle {
+      display: none;
+    }
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      padding: 12px 16px;
+      font-size: 18px;
+      display: none;
+      cursor: pointer;
+      z-index: 1001;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    footer {
+      background: var(--scroll-bg);
+      color: var(--text-color);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .social-icons a {
+      margin: 0 10px;
+      color: var(--text-color);
+      font-size: 1.5rem;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .social-icons a:hover {
+      color: var(--accent-color);
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        flex-direction: column;
+        background: var(--scroll-bg);
+        position: absolute;
+        top: 70px;
+        right: 0;
+        width: 220px;
+        display: none;
+        padding: 1rem;
+        border-radius: 0 0 0 8px;
+      }
+      .nav-links li {
+        margin-bottom: 10px;
+      }
+      .nav-links.show {
+        display: flex;
+      }
+      .menu-toggle {
+        display: block;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <!-- Scroll to Top Button -->
+  <button onclick="scrollToTop()" id="scrollTopBtn" title="Back to top">↑</button>
+  <!-- Navbar -->
+  <header class="navbar" id="navbar">
+    <div class="logo">MyBrand</div>
+    <nav>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><button class="theme-toggle" onclick="toggleTheme()">🌓</button></li>
+      </ul>
+    </nav>
+  </header>
+  <!-- Home Section -->
+  <section class="section" id="home">
+    <h1>Welcome to MyBrand</h1>
+    <p>
+      A simple responsive landing page with smooth animations, scroll-to-top button, and a contact form.
+    </p>
+  </section>
+  <!-- Features Section -->
+  <section class="section" id="features">
+    <h2>Features</h2>
+    <p>
+      ✅ Clean layout<br>
+      ✅ Fixed navbar<br>
+      ✅ Light/Dark toggle<br>
+      ✅ Scroll-to-top button<br>
+      ✅ Animated sections<br>
+    </p>
+  </section>
+  <!-- Pricing Section -->
+  <section class="section" id="pricing">
+    <h2>Pricing</h2>
+    <p>
+      <strong>Starter:</strong> Free<br>
+      <strong>Pro:</strong> ₹499/month<br>
+      <strong>Enterprise:</strong> Custom Quote
+    </p>
+  </section>
+  <!-- Contact Section -->
+  <section class="section" id="contact">
+    <h2>Contact Us</h2>
+    <form onsubmit="handleSubmit(event)">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea rows="5" name="message" placeholder="Your Message" required></textarea>
+      <button type="submit" class="submit-btn">Send Message</button>
+    </form>
+  </section>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 MyBrand. All rights reserved.</p>
+    <div class="social-icons">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+  </footer>
+  <script>
+    // Navbar & scroll top visibility
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      const scrollTopBtn = document.getElementById('scrollTopBtn');
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+      scrollTopBtn.style.display = window.scrollY > 200 ? 'block' : 'none';
+    });
+    // Theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle('light');
+    }
+    // Menu toggle
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('show');
+    }
+    // Scroll to top
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // Simulated contact form submission
+    function handleSubmit(event) {
+      event.preventDefault();
+      alert('Thank you! Your message has been received.');
+      event.target.reset();
+    }
+  </script>
+</body>
+</html>
